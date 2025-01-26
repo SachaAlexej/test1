@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Révélation d'Image</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+      width: 100vw;
+      height: 100vh;
+    }
+    .cell {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #222;
+    }
+    .cell img {
+      position: absolute;
+      width: 1200%; /* 12 x 100% */
+      height: 1000%; /* 10 x 100% */
+      left: calc(-100% * var(--col));
+      top: calc(-100% * var(--row));
+      transition: transform 0.5s, opacity 0.5s;
+      transform: scale(1.2);
+      opacity: 0;
+    }
+    .revealed img {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .cell input {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      color: #fff;
+      font-size: 1em;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div id="grid"></div>
+
+<script>
+  // Ton tableau de codes prédéfinis (à remplacer par tes codes)
+  const codes = [
+    'code1', 'code2', 'code3', /* ... jusqu'à 120 codes ... */ 'code120'
+  ];
+
+  const grid = document.getElementById('grid');
+  const rows = 10;
+  const cols = 12;
+  let index = 0;
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.style.setProperty('--row', row);
+      cell.style.setProperty('--col', col);
+
+      const img = document.createElement('img');
+      img.src = 'image.jpg'; // Assure-toi que ton image s'appelle 'image.jpg' ou change le nom ici
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Code ?';
+
+      // Gestionnaire d'événement pour le champ de saisie
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          if (input.value === codes[index]) {
+            cell.classList.add('revealed');
+            input.remove();
+          } else {
+            alert('Code incorrect. Essaie encore !');
+            input.value = '';
+          }
+        }
+      });
+
+      cell.appendChild(img);
+      cell.appendChild(input);
+      grid.appendChild(cell);
+
+      index++;
+    }
+  }
+</script>
+
+</body>
+</html>
